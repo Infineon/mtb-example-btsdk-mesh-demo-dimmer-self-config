@@ -102,6 +102,9 @@
 #if defined(SELF_CONFIG)
 #include "embedded_provisioner.h"
 #endif
+#ifdef DIRECTED_FORWARDING_SERVER_SUPPORTED
+#include "wiced_bt_mesh_mdf.h"
+#endif
 
 #ifdef HCI_CONTROL
 #include "wiced_transport.h"
@@ -490,9 +493,12 @@ void self_configure_next_op(TIMER_PARAM_TYPE arg)
                  ((p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_CONFIG_SRV) ||
                   (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_CONFIG_CLNT) ||
                   (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_REMOTE_PROVISION_SRV) ||
-                  (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_REMOTE_PROVISION_CLNT) ||
-                  (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_DIRECTED_FORWARDING_SRV) ||
-                  (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_DIRECTED_FORWARDING_CLNT))))
+                  (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_REMOTE_PROVISION_CLNT)
+#ifdef DIRECTED_FORWARDING_SERVER_SUPPORTED
+                  || (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_DIRECTED_FORWARDING_SRV)
+                  || (p_model->model_id == WICED_BT_MESH_CORE_MODEL_ID_DIRECTED_FORWARDING_CLNT)
+#endif
+                )))
                 continue;
 
             configure_model_app_bind(node_addr, p_model, element_idx, EMBEDDED_PROV_APP_KEY_IDX);
